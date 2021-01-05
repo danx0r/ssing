@@ -39,5 +39,6 @@ while i < tot - WINDOW:
 base = sum(base) / len(base)
 err = sum(errs) / len(errs)
 similarity = base-err
+dif = err/base
 
-print ("SIM:", similarity)
+print ("ERR", err, "BASE", base, "SIM:", similarity, "DIF", dif)
