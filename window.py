@@ -12,10 +12,17 @@ i = 0
 out = []
 while i < len(wav)-WINDOW:
     dft = np.fft.fft(wav[i: i+WINDOW])
-    # if i > len(wav)//2:
-    for j in range(WINDOW//16, WINDOW-1):
-        dft[j] = 0
-    out.append( np.int16(np.real(np.fft.ifft(dft))) )
+
+    for j in range(WINDOW):
+        if j >= WINDOW//2:
+            dft[j] = 0               #rm neg half, vol X 2 to compensate
+        else:
+            dft[j] *= 2
+
+    idft = np.fft.ifft(dft)
+    ireal = np.real(idft)
+
+    out.append(np.int16(ireal))
     i += WINDOW
 
 wo = np.concatenate(out)
