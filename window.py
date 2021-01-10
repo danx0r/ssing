@@ -2,7 +2,7 @@ import os, sys, time
 import numpy as np
 from scipy.io import wavfile as wf
 
-WINDOW = 44100 // 25
+WINDOW = 44100 -10000#// 25
 
 fn = sys.argv[1]
 
