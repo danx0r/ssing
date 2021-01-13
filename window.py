@@ -20,7 +20,7 @@ while i < len(wav)-WINDOW:
             dft[j] *= 2
 
         #zero out phase
-        dft[j] = np.complex(np.absolute(dft[j]), 0)
+        # dft[j] = np.complex(np.absolute(dft[j]), 0)
 
     idft = np.fft.ifft(dft)
     ireal = np.real(idft)
