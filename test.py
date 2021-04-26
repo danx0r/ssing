@@ -4,10 +4,10 @@ from scipy.io import wavfile as wf
 import matplotlib.pyplot as plt
 pi2 = math.pi*2
 
-sr=40
+sr=30
 sec=1
 chunks=3
-freq=3.4
+freq=2.4
 
 def plot_complex(a):
     mag = []
@@ -15,7 +15,7 @@ def plot_complex(a):
     for x in a:
         mag.append(abs(x))
         p = np.angle(x) % pi2
-        phase.append(p)
+        phase.append(p * max(mag) / pi2)
     plt.plot(mag)
     plt.plot(phase)
 
