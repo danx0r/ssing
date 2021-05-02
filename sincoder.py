@@ -1,23 +1,22 @@
 import math
 import matplotlib.pyplot as plt
 
-pi2 = math.pi * 2
+PI2 = math.pi * 2
+SAMP_SEC = 100
 
-samp_sec = 100
-num_blk = 1
-freq = 2
-
-blocks = []
-
-for b in range(num_blk):
+def sindata(freq, phase, seconds):
     data = []
-    phase = 0
-    for i in range(samp_sec):
-        sin = math.sin(phase)
-        cos = math.cos(phase)
-        data.append((sin, cos))
-        phase += pi2 * freq / samp_sec
-    print (data)
+    for i in range(SAMP_SEC * seconds):
+        y = math.sin(phase)
+        data.append(y)
+        phase += PI2 * freq / SAMP_SEC
+    return data
 
-    plt.plot(data, marker = '.')
-    plt.show()
+sin = sindata(2, 0, 1)
+# print (sin)
+
+cos = sindata(2, PI2/4, 1)
+# print (cos)
+
+plt.plot(list(zip(sin, cos)), marker = '.')
+plt.show()
