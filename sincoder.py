@@ -12,11 +12,19 @@ def sindata(freq, phase, seconds):
         phase += PI2 * freq / SAMP_SEC
     return data
 
+def muldata (a, b):
+    data = []
+    for x, y in zip(a, b):
+        data.append(x * y)
+    return data
+
 sin = sindata(2, 0, 1)
 # print (sin)
 
 cos = sindata(2, PI2/4, 1)
 # print (cos)
 
-plt.plot(list(zip(sin, cos)), marker = '.')
+mul = muldata(sin, cos)
+
+plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
