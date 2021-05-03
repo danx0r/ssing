@@ -76,9 +76,9 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
     return minf, minp, mina, remain, bas, err
 
 def max_fpa(data):
-    f, p, a, r, b, e = max_fpa_(data, 1, 20, .25, 0, PI2, PI2/16, .1, 11, .1)
+    f, p, a, r, b, e = max_fpa_(data, 1, 80, 1, 0, PI2, PI2/16, .1, 11, .1)
     print ("FPA initial:", f, p, a, e)
-    f, p, a, r, b, e = max_fpa_(data, f-.125, f+.125, .005, p-PI2/32, p+PI2/32, PI2/256, a-.05, a+.05, .01)
+    f, p, a, r, b, e = max_fpa_(data, f-.5, f+.5, .01, p-PI2/32, p+PI2/32, PI2/256, a-.05, a+.05, .01)
     print ("FPA fine-tune:", f, p, a, e)
     return f, p, a, r, b, e
 
