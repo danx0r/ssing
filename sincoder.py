@@ -24,6 +24,12 @@ def mulscalar (a, b):
         data.append(x * b)
     return data
 
+def adddata (a, b):
+    data = []
+    for x, y in zip(a, b):
+        data.append(x + y)
+    return data
+
 def subdata (a, b):
     data = []
     for x, y in zip(a, b):
@@ -37,12 +43,12 @@ def energy(a):
     return sum ** .5
 
 #detect freq, phase, amplitude of largest component
-def max_fpa_(data, flo, fhi, df, dp, alo, ahi, da):
+def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
     sec = len(data) / SAMP_SEC
     err = energy(data)
-    print ("FPA initial err:", err)
-    p = 0
-    while p < PI2:
+    # print ("FPA initial err:", err)
+    p = plo
+    while p < phi:
         f = flo
         while f <= fhi:
             basis = sindata(f, p, sec)
@@ -64,7 +70,10 @@ def max_fpa_(data, flo, fhi, df, dp, alo, ahi, da):
     return minf, minp, mina, remain
 
 def max_fpa(data):
-    f, p, a, r = max_fpa_(data, 1, 30, .25, PI2/16, .1, 11, .1)
+    f, p, a, r = max_fpa_(data, 1, 30, .25, 0, PI2, PI2/16, .1, 11, .1)
+    print ("FPA initial:", f, p, a)
+    f, p, a, r = max_fpa_(data, f-.125, f+.125, .01, p-PI2/32, p+PI2/16-PI2/32, PI2/256, a-.05, a+.05, .01)
+    print ("FPA fine-tune:", f, p, a)
     return f, p, a, r
 
 
@@ -81,8 +90,18 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(4.95, 2, 1)
-test = mulscalar(test, 1.23)
+test = sindata(3.33, 1.5, 1)
+test = mulscalar(test, 5.76)
+test2 = sindata(5.11, 2.5, 1)
+test2 = mulscalar(test2, 4.11)
+
+plt.plot(list(zip(test, test2)), marker = '.')
+plt.show()
+
+test = adddata(test2, test)
+
+plt.plot(test, marker = '.')
+plt.show()
 
 f, p, a, r = max_fpa(test)
 print (f, p, a)
