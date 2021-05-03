@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as plt
 
 PI2 = math.pi * 2
-SAMP_SEC = 100
+SAMP_SEC = 240
 
 def sindata(freq, phase, seconds):
     data = []
@@ -44,14 +44,16 @@ def energy(a):
 
 #detect freq, phase, amplitude of largest component
 def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
+    # print ("FLO:", flo)
     sec = len(data) / SAMP_SEC
     err = energy(data)
     minf = minp = mina = 0
     remain = []
-    # print ("FPA initial err:", err)
+    print ("FPA initial err:", err)
     p = plo
     while p < phi:
         f = flo
+        # print ("FLO == f:", f)
         while f <= fhi:
             basis = sindata(f, p, sec)
             a = alo
@@ -69,14 +71,14 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
                 a += da
             f += df
         p += dp
-    return minf, minp, mina, remain
+    return minf, minp, mina, remain, err
 
 def max_fpa(data):
-    f, p, a, r = max_fpa_(data, 1, 30, .25, 0, PI2, PI2/16, .1, 11, .1)
-    print ("FPA initial:", f, p, a)
-    # f, p, a, r = max_fpa_(data, f-.125, f+.125, .01, p-PI2/32, p+PI2/16-PI2/32, PI2/256, a-.05, a+.05, .01)
-    # print ("FPA fine-tune:", f, p, a)
-    return f, p, a, r
+    f, p, a, r, e = max_fpa_(data, 1, 10, .25, 0, PI2, PI2/16, .1, 11, .1)
+    print ("FPA initial:", f, p, a, e)
+    f, p, a, r, e = max_fpa_(data, f-.125, f+.125, .005, p-PI2/32, p+PI2/16-PI2/32, PI2/256, a-.05, a+.05, .01)
+    print ("FPA fine-tune:", f, p, a, e)
+    return f, p, a, r, e
 
 
 """
@@ -92,28 +94,30 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(3, 0, 1)
-test = mulscalar(test, 2)
-test2 = sindata(5.1, PI2/64, 1)
-test2 = mulscalar(test2, 1.25)
+test = sindata(5.444, 1, 1)
+test = mulscalar(test, 1.6)
+test2 = sindata(8.111, 2, 1)
+test2 = mulscalar(test2, .75)
+
+# test=test2
 
 plt.plot(list(zip(test, test2)), marker = '.')
 plt.show()
-
+#
 test = adddata(test2, test)
 
 plt.plot(test, marker = '.')
 plt.show()
 
-f, p, a, r = max_fpa(test)
-print ("RESULT:", f, p, a)
+f, p, a, r, er = max_fpa(test)
+print ("RESULT:", f, p, a, "ERR:", er)
 
 plt.plot(list(zip(test, r)), marker = '.')
 plt.show()
 
-# test = r
-# f, p, a, r = max_fpa(test)
-# print ("RESULT:", f, p, a)
-#
-# plt.plot(list(zip(test, r)), marker = '.')
-# plt.show()
+test = r
+f, p, a, r, er = max_fpa(test)
+print ("RESULT:", f, p, a, er)
+
+plt.plot(r, marker = '.')
+plt.show()
