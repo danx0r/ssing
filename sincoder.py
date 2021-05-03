@@ -50,6 +50,7 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
     err = energy(data)
     minf = minp = mina = 0
     remain = []
+    bas = []
     print ("FPA initial err:", err)
     p = plo
     while p < phi:
@@ -75,10 +76,17 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
         p += dp
     return minf, minp, mina, remain, bas, err
 
+# FHI  = SAMP_SEC/2
+# FSTEP = FHI / 100
+FHI  = 80
+FSTEP = 1
+
 def max_fpa(data):
-    f, p, a, r, b, e = max_fpa_(data, 1, 80, 1, 0, PI2, PI2/16, .1, 11, .1)
+    f, p, a, r, b, e = max_fpa_(data, 1, FHI, FSTEP, 0, PI2, PI2/16, .1, 11, .1)
     print ("FPA initial:", f, p, a, e)
-    f, p, a, r, b, e = max_fpa_(data, f-.5, f+.5, .01, p-PI2/32, p+PI2/32, PI2/256, a-.05, a+.05, .01)
+    print ("FINETUNE FREQ BRACKET:", f-FSTEP*.5, f+FSTEP*.5, FSTEP/100)
+    print ("FINETUNE PHASE BRACKET:", p-PI2/16, p+PI2/16, PI2/256)
+    f, p, a, r, b, e = max_fpa_(data, f-FSTEP*.5, f+FSTEP*.5, FSTEP/100, p-PI2/16, p+PI2/16, PI2/256, a-.05, a+.05, .01)
     print ("FPA fine-tune:", f, p, a, e)
     return f, p, a, r, b, e
 
@@ -96,15 +104,15 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-# test = sindata(4.21387, 0, 1)
-# test = mulscalar(test, 1.6)
-# test2 = sindata(15.82444, 13*PI2/256, 1)
-# test2 = mulscalar(test2, .8)
-
-test = sindata(8, 0, SEC_CHUNK)
+test = sindata(4.21387, 1, 1)
 test = mulscalar(test, 1.6)
-test2 = sindata(10, 0, SEC_CHUNK)
-test2 = mulscalar(test2, .4)
+test2 = sindata(15.82444, 2, 1)
+test2 = mulscalar(test2, .8)
+
+# test = sindata(8.77, 0, SEC_CHUNK)
+# test = mulscalar(test, 1.6)
+# test2 = sindata(10, 0, SEC_CHUNK)
+# test2 = mulscalar(test2, 0)
 
 # test=test2
 t1 = list(test)
