@@ -33,7 +33,7 @@ def adddata (a, b):
 def subdata (a, b):
     data = []
     for x, y in zip(a, b):
-        data.append(y - x)
+        data.append(x - y)
     return data
 
 def energy(a):
@@ -68,17 +68,18 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
                     minp = p
                     mina = a
                     remain = list(c)
+                    bas = list(b)
                 a += da
             f += df
         p += dp
-    return minf, minp, mina, remain, err
+    return minf, minp, mina, remain, bas, err
 
 def max_fpa(data):
-    f, p, a, r, e = max_fpa_(data, 1, 10, .25, 0, PI2, PI2/16, .1, 11, .1)
+    f, p, a, r, b, e = max_fpa_(data, 1, 10, .25, 0, PI2, PI2/16, .1, 11, .1)
     print ("FPA initial:", f, p, a, e)
-    f, p, a, r, e = max_fpa_(data, f-.125, f+.125, .005, p-PI2/32, p+PI2/32, PI2/256, a-.05, a+.05, .01)
+    f, p, a, r, b, e = max_fpa_(data, f-.125, f+.125, .005, p-PI2/32, p+PI2/32, PI2/256, a-.05, a+.05, .01)
     print ("FPA fine-tune:", f, p, a, e)
-    return f, p, a, r, e
+    return f, p, a, r, b, e
 
 
 """
@@ -94,10 +95,10 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(5.444, 1, 1)
-test = mulscalar(test, 1.6)
-test2 = sindata(8.111, 2, 1)
-test2 = mulscalar(test2, .75)
+test = sindata(2.0888, 0, 1)
+# test = mulscalar(test, 1.6)
+test2 = sindata(4.3, 2, 1)
+test2 = mulscalar(test2, .5)
 
 # test=test2
 
@@ -109,14 +110,14 @@ orig = test = adddata(test2, test)
 plt.plot(test, marker = '.')
 plt.show()
 
-f, p, a, r, er = max_fpa(test)
+f, p, a, r, b, er = max_fpa(test)
 print ("RESULT:", f, p, a, "ERR:", er)
 
-plt.plot(list(zip(test, r)), marker = '.')
+plt.plot(list(zip(b, r)), marker = '.')
 plt.show()
 
 test = r
-f2, p2, a2, r, er = max_fpa(test)
+f2, p2, a2, r, b, er = max_fpa(test)
 print ("RESULT:", f2, p2, a2, er)
 
 plt.plot(r, marker = '.')
