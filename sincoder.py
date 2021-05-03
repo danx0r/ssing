@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as plt
 
 PI2 = math.pi * 2
-SAMP_SEC = 240
+SAMP_SEC = 200
 
 def sindata(freq, phase, seconds):
     data = []
@@ -75,7 +75,7 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
     return minf, minp, mina, remain, bas, err
 
 def max_fpa(data):
-    f, p, a, r, b, e = max_fpa_(data, 1, 10, .25, 0, PI2, PI2/16, .1, 11, .1)
+    f, p, a, r, b, e = max_fpa_(data, 1, 20, .25, 0, PI2, PI2/16, .1, 11, .1)
     print ("FPA initial:", f, p, a, e)
     f, p, a, r, b, e = max_fpa_(data, f-.125, f+.125, .005, p-PI2/32, p+PI2/32, PI2/256, a-.05, a+.05, .01)
     print ("FPA fine-tune:", f, p, a, e)
@@ -95,10 +95,10 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(2.0888, 0, 1)
-# test = mulscalar(test, 1.6)
-test2 = sindata(4.3, 2, 1)
-test2 = mulscalar(test2, .5)
+test = sindata(19.21387, 0, 1)
+test = mulscalar(test, 1.6)
+test2 = sindata(15.82444, 13*PI2/256, 1)
+test2 = mulscalar(test2, .8)
 
 # test=test2
 
