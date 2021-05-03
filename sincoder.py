@@ -37,14 +37,17 @@ def energy(a):
     return sum ** .5
 
 #detect freq, phase, amplitude of largest component
-def max_fpa(data):
+def max_fpa_(data, flo, fhi, df, dp, alo, ahi, da):
     sec = len(data) / SAMP_SEC
     err = energy(data)
     print ("FPA initial err:", err)
-    for p in [x * PI2/16 for x in range(16)]:
-        for f in [x / 10 for x in range(10, 101)]:
+    p = 0
+    while p < PI2:
+        f = flo
+        while f <= fhi:
             basis = sindata(f, p, sec)
-            for a in [x / 4 for x in range(1, 11)]:
+            a = alo
+            while a <= ahi:
                 b = mulscalar(basis, a)
                 c = subdata(data, b)
                 e2 = energy(c)
@@ -55,7 +58,14 @@ def max_fpa(data):
                     minp = p
                     mina = a
                     remain = list(c)
+                a += da
+            f += df
+        p += dp
     return minf, minp, mina, remain
+
+def max_fpa(data):
+    f, p, a, r = max_fpa_(data, 1, 30, .25, PI2/16, .1, 11, .1)
+    return f, p, a, r
 
 
 """
