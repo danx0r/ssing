@@ -46,6 +46,8 @@ def energy(a):
 def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
     sec = len(data) / SAMP_SEC
     err = energy(data)
+    minf = minp = mina = 0
+    remain = []
     # print ("FPA initial err:", err)
     p = plo
     while p < phi:
@@ -58,7 +60,7 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
                 c = subdata(data, b)
                 e2 = energy(c)
                 # print ("FPA test fpa:", f, p, a, "err:", e2, "new:", e2<err)
-                if e2 < err:
+                if e2 <= err:
                     err = e2
                     minf = f
                     minp = p
@@ -72,8 +74,8 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
 def max_fpa(data):
     f, p, a, r = max_fpa_(data, 1, 30, .25, 0, PI2, PI2/16, .1, 11, .1)
     print ("FPA initial:", f, p, a)
-    f, p, a, r = max_fpa_(data, f-.125, f+.125, .01, p-PI2/32, p+PI2/16-PI2/32, PI2/256, a-.05, a+.05, .01)
-    print ("FPA fine-tune:", f, p, a)
+    # f, p, a, r = max_fpa_(data, f-.125, f+.125, .01, p-PI2/32, p+PI2/16-PI2/32, PI2/256, a-.05, a+.05, .01)
+    # print ("FPA fine-tune:", f, p, a)
     return f, p, a, r
 
 
@@ -90,10 +92,10 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(3.33, 1.5, 1)
-test = mulscalar(test, 5.76)
-test2 = sindata(5.11, 2.5, 1)
-test2 = mulscalar(test2, 4.11)
+test = sindata(3, 0, 1)
+test = mulscalar(test, 2)
+test2 = sindata(5.1, PI2/64, 1)
+test2 = mulscalar(test2, 1.25)
 
 plt.plot(list(zip(test, test2)), marker = '.')
 plt.show()
@@ -104,8 +106,14 @@ plt.plot(test, marker = '.')
 plt.show()
 
 f, p, a, r = max_fpa(test)
-print (f, p, a)
+print ("RESULT:", f, p, a)
 
 plt.plot(list(zip(test, r)), marker = '.')
 plt.show()
 
+# test = r
+# f, p, a, r = max_fpa(test)
+# print ("RESULT:", f, p, a)
+#
+# plt.plot(list(zip(test, r)), marker = '.')
+# plt.show()
