@@ -41,20 +41,21 @@ def max_fpa(data):
     sec = len(data) / SAMP_SEC
     err = energy(data)
     print ("FPA initial err:", err)
-    for p in [x * PI2/16 for x in range(1)]:
-        for f in [x / 10 for x in range(10, 41)]:
+    for p in [x * PI2/16 for x in range(16)]:
+        for f in [x / 10 for x in range(10, 101)]:
             basis = sindata(f, p, sec)
-            for a in [1]: #[x / 4 for x in range(1, 11)]:
+            for a in [x / 4 for x in range(1, 11)]:
                 b = mulscalar(basis, a)
                 c = subdata(data, b)
                 e2 = energy(c)
-                print ("FPA test freq:", f, "err:", e2, "new:", e2<err)
+                # print ("FPA test fpa:", f, p, a, "err:", e2, "new:", e2<err)
                 if e2 < err:
                     err = e2
                     minf = f
                     minp = p
                     mina = a
-    return minf, minp, mina
+                    remain = list(c)
+    return minf, minp, mina, remain
 
 
 """
@@ -70,11 +71,12 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(3, 0, 1)
+test = sindata(4.95, 2, 1)
+test = mulscalar(test, 1.23)
 
-f, p, a = max_fpa(test)
+f, p, a, r = max_fpa(test)
 print (f, p, a)
 
-plt.plot(test, marker = '.')
+plt.plot(list(zip(test, r)), marker = '.')
 plt.show()
 
