@@ -2,7 +2,8 @@ import math
 import matplotlib.pyplot as plt
 
 PI2 = math.pi * 2
-SAMP_SEC = 200
+SAMP_SEC = 400
+SEC_CHUNK = 0.5
 
 def sindata(freq, phase, seconds):
     data = []
@@ -95,10 +96,15 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(4.21387, 0, 1)
+# test = sindata(4.21387, 0, 1)
+# test = mulscalar(test, 1.6)
+# test2 = sindata(15.82444, 13*PI2/256, 1)
+# test2 = mulscalar(test2, .8)
+
+test = sindata(8, 0, SEC_CHUNK)
 test = mulscalar(test, 1.6)
-test2 = sindata(15.82444, 13*PI2/256, 1)
-test2 = mulscalar(test2, .8)
+test2 = sindata(10, 0, SEC_CHUNK)
+test2 = mulscalar(test2, .4)
 
 # test=test2
 t1 = list(test)
@@ -121,9 +127,9 @@ print ("RESULT:", f2, p2, a2, er)
 plt.plot(list(zip(orig, b, r)), marker = '.')
 plt.show()
 
-rec1 = sindata(f, p, 1)
+rec1 = sindata(f, p, SEC_CHUNK)
 rec1 = mulscalar(rec1, a)
-rec2 = sindata(f2, p2, 1)
+rec2 = sindata(f2, p2, SEC_CHUNK)
 rec2 = mulscalar(rec2, a2)
 
 recon = adddata(rec1, rec2)
