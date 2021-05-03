@@ -76,7 +76,7 @@ def max_fpa_(data, flo, fhi, df, plo, phi, dp, alo, ahi, da):
 def max_fpa(data):
     f, p, a, r, e = max_fpa_(data, 1, 10, .25, 0, PI2, PI2/16, .1, 11, .1)
     print ("FPA initial:", f, p, a, e)
-    f, p, a, r, e = max_fpa_(data, f-.125, f+.125, .005, p-PI2/32, p+PI2/16-PI2/32, PI2/256, a-.05, a+.05, .01)
+    f, p, a, r, e = max_fpa_(data, f-.125, f+.125, .005, p-PI2/32, p+PI2/32, PI2/256, a-.05, a+.05, .01)
     print ("FPA fine-tune:", f, p, a, e)
     return f, p, a, r, e
 
@@ -104,7 +104,7 @@ test2 = mulscalar(test2, .75)
 plt.plot(list(zip(test, test2)), marker = '.')
 plt.show()
 #
-test = adddata(test2, test)
+orig = test = adddata(test2, test)
 
 plt.plot(test, marker = '.')
 plt.show()
@@ -116,8 +116,18 @@ plt.plot(list(zip(test, r)), marker = '.')
 plt.show()
 
 test = r
-f, p, a, r, er = max_fpa(test)
-print ("RESULT:", f, p, a, er)
+f2, p2, a2, r, er = max_fpa(test)
+print ("RESULT:", f2, p2, a2, er)
 
 plt.plot(r, marker = '.')
+plt.show()
+
+rec1 = sindata(f, p, 1)
+rec1 = mulscalar(rec1, a)
+rec2 = sindata(f2, p2, 1)
+rec2 = mulscalar(rec2, a2)
+
+recon = adddata(rec1, rec2)
+
+plt.plot(recon, marker = '.')
 plt.show()
