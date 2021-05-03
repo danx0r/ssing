@@ -95,32 +95,30 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(19.21387, 0, 1)
+test = sindata(4.21387, 0, 1)
 test = mulscalar(test, 1.6)
 test2 = sindata(15.82444, 13*PI2/256, 1)
 test2 = mulscalar(test2, .8)
 
 # test=test2
+t1 = list(test)
 
-plt.plot(list(zip(test, test2)), marker = '.')
-plt.show()
-#
 orig = test = adddata(test2, test)
 
-plt.plot(test, marker = '.')
+plt.plot(list(zip(orig, t1, test2)), marker = '.')
 plt.show()
 
 f, p, a, r, b, er = max_fpa(test)
 print ("RESULT:", f, p, a, "ERR:", er)
 
-plt.plot(list(zip(b, r)), marker = '.')
+plt.plot(list(zip(orig, b, r)), marker = '.')
 plt.show()
 
 test = r
 f2, p2, a2, r, b, er = max_fpa(test)
 print ("RESULT:", f2, p2, a2, er)
 
-plt.plot(r, marker = '.')
+plt.plot(list(zip(orig, b, r)), marker = '.')
 plt.show()
 
 rec1 = sindata(f, p, 1)
@@ -130,5 +128,5 @@ rec2 = mulscalar(rec2, a2)
 
 recon = adddata(rec1, rec2)
 
-plt.plot(recon, marker = '.')
+plt.plot(list(zip(orig, recon, r)), marker = '.')
 plt.show()
