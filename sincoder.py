@@ -1,9 +1,10 @@
-import math
+import sys, math
 import matplotlib.pyplot as plt
+from scipy.signal import periodogram as per
 
 PI2 = math.pi * 2
-SAMP_SEC = 400
-SEC_CHUNK = 0.5
+SAMP_SEC = 1000
+SEC_CHUNK = 1.0
 
 def sindata(freq, phase, seconds):
     data = []
@@ -104,10 +105,11 @@ plt.plot(list(zip(sin, cos, mul)), marker = '.')
 plt.show()
 """
 
-test = sindata(4.21387, 1, 1)
-test = mulscalar(test, 1.6)
-test2 = sindata(15.82444, 2, 1)
-test2 = mulscalar(test2, .8)
+test = sindata(30.5, 0, 1)
+# test = mulscalar(test, 1.6)
+
+test2 = sindata(47, 0, 1)
+test2 = mulscalar(test2, 1)
 
 # test = sindata(8.77, 0, SEC_CHUNK)
 # test = mulscalar(test, 1.6)
@@ -121,6 +123,12 @@ orig = test = adddata(test2, test)
 
 plt.plot(list(zip(orig, t1, test2)), marker = '.')
 plt.show()
+
+p = per(test)
+print (p)
+plt.plot(p[1], marker = '.')
+plt.show()
+exit()
 
 f, p, a, r, b, er = max_fpa(test)
 print ("RESULT:", f, p, a, "ERR:", er)
