@@ -11,7 +11,7 @@ def rmse(a, b):
     return sum(sum((a-b)**2))**.5
 
 aud=load(sys.argv[1], sr=44100)[0]
-m=mel(aud,sr=44100, hop_length=256, n_fft=1024, n_mels=512)
+m=mel(aud,sr=44100, hop_length=256, n_fft=1024, n_mels=256)
 if len(sys.argv) > 2:
     aud=load(sys.argv[2], sr=44100)[0]
     m2=mel(aud,sr=44100, hop_length=256, n_fft=1024)
