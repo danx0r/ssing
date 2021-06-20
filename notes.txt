@@ -7,15 +7,37 @@ GOAL:
 ASSUMPTIONS:
 
 * Source singer can sing any material
-
 * Target singer training data consists of specific historical performances (not the ones we want to create)
 
 STEPS:
 
 * acquire a-capella performances of Target (preferably with original mixed version or separated backing tracks)
-
 * have Source sing performances as close to matching Target as possible. Source/Target performance pairs are training data
-
 * Train ML model to derive Target from Source for training material
-
 * Apply model to Source data for which there is no actual Target data (ie songs Target never sang as far as we know)
+
+IMPLEMENtATION:
+
+Using librosa (See librosa_test.py) we can implement a mel spectrogram decomposition of an audio window. This frequency-domain
+data can be manipulated and then reconstructed using the Griffin-Lim algorithm, which minimizes phase errors between windows.
+
+Decent test results were obtained with:
+
+* sample rate = 44100 samp/sec
+* 188 Mel bins
+* window = 1024 (~23 ms, 43 hz))
+* hop = 256 samples (~6 ms)
+
+All ML magic should occur in the frequency domain.
+
+First-pass approach: train ML on 188 inputs and outputs (mel bands for one window)
+
+Possible mod: train on window-1 to +1 for input (188*3 = 564), 188 outputs
+
+toy version for early development:
+
+* 10 bands instead of 188
+* define a function over vector of length 10
+* input source is random
+* input target is function over source
+* train ML to minimize error on new random vectors (ie imitate the function)
